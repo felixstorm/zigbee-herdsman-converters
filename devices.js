@@ -5089,7 +5089,7 @@ const devices = [
         description: 'Shutter control J1',
         supports: 'open, close, stop, position, tilt',
         fromZigbee: [fz.cover_position_tilt],
-        toZigbee: [tz.cover_state, tz.cover_position_tilt, tz.ubisys_configure_j1],
+        toZigbee: [tz.cover_state, tz.cover_position_tilt, tz.ubisys_configure_j1, tz.ubisys_configure_device_setup],
     },
 
     // Lingan

@@ -1109,6 +1109,19 @@ const converters = {
     },
 
     // ubisys configuration / calibration converters
+    ubisys_configure_device_setup: {
+        key: ['configure_device_setup'],
+        convertGet: async (entity, key, meta) => {
+            await entity.write('manuSpecificUbisysDeviceSetup', {inputConfigurations: [0, 0]});
+            // meta.logger.warn(JSON.stringify(await entity.read('manuSpecificUbisysDeviceSetup', [
+            //     'inputConfigurations',
+            //     'inputActions',
+            // ], options.ubisys)));
+            // meta.logger.warn(JSON.stringify(await entity.readStructured('manuSpecificUbisysDeviceSetup', {
+            //     'inputActions': [0,1],
+            // }, options.ubisys)));
+        }
+    },
     ubisys_configure_j1: {
         key: ['configure_j1'],
         convertSet: async (entity, key, value, meta) => {
