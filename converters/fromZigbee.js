@@ -561,6 +561,19 @@ const converters = {
             return {action: 'panic'};
         },
     },
+    command_arm: {
+        cluster: 'ssIasAce',
+        type: 'commandArm',
+        convert: (model, msg, publish, options, meta) => {
+            const lookup = {
+                0: 'disarm',
+                1: 'arm_day_zones',
+                2: 'arm_night_zones',
+                3: 'arm_all_zones',
+            };
+            return {action: lookup[msg.data['armmode']]};
+        },
+    },
     command_on: {
         cluster: 'genOnOff',
         type: 'commandOn',
@@ -4109,6 +4122,22 @@ const converters = {
                 'commandStop': 'stop',
             };
             return {action: `${msg.endpoint.ID}_cover_${lookup[msg.type]}`};
+        },
+    },
+    EMIZB_132_power: {
+        cluster: 'haElectricalMeasurement',
+        type: ['attributeReport', 'readResponse'],
+        convert: (model, msg, publish, options, meta) => {
+            // Cannot use electrical_measurement_power here as the reported divisor is not correct
+            // https://github.com/Koenkk/zigbee-herdsman-converters/issues/974#issuecomment-600834722
+            const payload = {};
+            if (msg.data.hasOwnProperty('rmsCurrent')) {
+                payload.current = precisionRound(msg.data['rmsCurrent'] / 10, 2);
+            }
+            if (msg.data.hasOwnProperty('rmsVoltage')) {
+                payload.voltage = precisionRound(msg.data['rmsVoltage'] / 10, 2);
+            }
+            return payload;
         },
     },
 

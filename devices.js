@@ -608,6 +608,7 @@ const devices = [
         endpoint: (device) => {
             return {'system': 1, 'default': 2};
         },
+        onEvent: xiaomi.prevent_reset,
     },
     {
         zigbeeModel: ['lumi.ctrl_ln1.aq1', 'lumi.ctrl_ln1'],
@@ -642,6 +643,7 @@ const devices = [
         endpoint: (device) => {
             return {'system': 1, 'left': 2, 'right': 3};
         },
+        onEvent: xiaomi.prevent_reset,
     },
     {
         zigbeeModel: ['lumi.ctrl_ln2.aq1', 'lumi.ctrl_ln2'],
@@ -3245,6 +3247,13 @@ const devices = [
         description: 'SMART+ Zigbee adjustable white edge-lit flush mount light',
         extend: generic.light_onoff_brightness_colortemp,
     },
+    {
+        zigbeeModel: ['Outdoor Accent RGB'],
+        model: '75541',
+        vendor: 'Sylvania',
+        description: 'SMART+ Outdoor Accent RGB lighting kit',
+        extend: generic.light_onoff_brightness_colortemp_colorxy,
+    },
 
     // Leviton
     {
@@ -3844,18 +3853,18 @@ const devices = [
         zigbeeModel: ['GL-S-007Z'],
         model: 'GL-S-007Z',
         vendor: 'Gledopto',
-        description: 'Smart RGBW GU10',
+        description: 'Smart RGB+CCT 5W GU10',
         extend: gledopto.light,
-        supports: 'on/off, brightness, color, white',
+        supports: 'on/off, brightness, color temperature, color',
         meta: {disableDefaultResponse: true},
     },
     {
         zigbeeModel: ['GL-S-007ZS'],
         model: 'GL-S-007ZS',
         vendor: 'Gledopto',
-        description: 'Smart RGB+CCT GU10',
+        description: 'Smart RGB+CCT 4W GU10 plus model',
         extend: gledopto.light,
-        supports: 'on/off, brightness, color, color temperature',
+        supports: 'on/off, brightness, color temperature, color',
     },
     {
         zigbeeModel: ['GL-S-008Z'],
@@ -5376,6 +5385,18 @@ const devices = [
         fromZigbee: [fz.st_button_state],
         toZigbee: [],
     },
+    {
+        zigbeeModel: ['GASSensor-EM'],
+        model: 'HS1CG-E',
+        vendor: 'HEIMAN',
+        description: 'Combustible gas sensor',
+        supports: 'gas',
+        fromZigbee: [fz.ias_gas_alarm_1],
+        toZigbee: [],
+        whiteLabel: [
+            {vendor: 'Piri', model: 'HSIO18008'},
+        ],
+    },
 
     // GS
     {
@@ -5682,7 +5703,7 @@ const devices = [
         // corresponding to the row needs to be unbound (https://www.zigbee2mqtt.io/information/binding.html)
         // If that operation was successful, the switch will respond to button presses on that
         // by blinking multiple times (vs. just blinking once if it's bound).
-        zigbeeModel: ['RM01'],
+        zigbeeModel: ['RM01', 'RB01'],
         model: '6735/6736/6737',
         vendor: 'Busch-Jaeger',
         description: 'Zigbee Light Link power supply/relay/dimmer',
@@ -6659,6 +6680,19 @@ const devices = [
         description: 'ZigBee AC phase-cut dimmer',
         extend: generic.light_onoff_brightness,
     },
+    {
+        zigbeeModel: ['HOMA1005'],
+        model: 'HLC614-ZLL',
+        vendor: 'Shenzhen Homa',
+        description: '3 channel relay module',
+        supports: 'on/off',
+        fromZigbee: [],
+        toZigbee: [tz.on_off],
+        meta: {multiEndpoint: true},
+        endpoint: (device) => {
+            return {l1: 1, l2: 2, l3: 3};
+        },
+    },
 
     // Honyar
     {
@@ -7080,7 +7114,7 @@ const devices = [
 
     // Konke
     {
-        zigbeeModel: ['3AFE170100510001'],
+        zigbeeModel: ['3AFE170100510001', '3AFE280100510001'],
         model: '2AJZ4KPKEY',
         vendor: 'Konke',
         description: 'Multi-function button',
@@ -7777,17 +7811,6 @@ const devices = [
         },
     },
 
-    // Piri
-    {
-        zigbeeModel: ['GASSensor-EM'],
-        model: 'HSIO18008',
-        vendor: 'Piri',
-        description: 'Combustible gas sensor',
-        supports: 'gas',
-        fromZigbee: [fz.ias_gas_alarm_1],
-        toZigbee: [],
-    },
-
     // PEQ
     {
         zigbeeModel: ['3300'],
@@ -8125,6 +8148,20 @@ const devices = [
         fromZigbee: [fz.ts0043_click],
         toZigbee: [],
     },
+    {
+        zigbeeModel: ['TS0215'],
+        model: 'S9ZGBRC01',
+        vendor: 'Smart9',
+        description: 'Smart remote controller',
+        supports: 'action',
+        fromZigbee: [fz.command_arm, fz.command_emergency, fz.battery],
+        toZigbee: [],
+        meta: {configureKey: 1},
+        configure: async (device, coordinatorEndpoint) => {
+            const endpoint = device.getEndpoint(1);
+            await bind(endpoint, coordinatorEndpoint, ['genPowerCfg']);
+        },
+    },
 
     // Ajax Online
     {
@@ -8428,7 +8465,7 @@ const devices = [
 
     // Linkind
     {
-        zigbeeModel: ['ZBT-CCTLight-D0106'],
+        zigbeeModel: ['ZBT-CCTLight-D0106', 'ZBT-CCTLight-GLS0108'],
         model: 'ZL1000100-CCT-US-V1A02',
         vendor: 'Linkind',
         description: 'Zigbee LED 9W A19 bulb, dimmable & tunable',
@@ -8534,6 +8571,32 @@ const devices = [
         vendor: 'LifeControl',
         description: 'RGB LED lamp',
         extend: generic.light_onoff_brightness_colortemp_colorxy,
+    },
+
+    // Develco
+    {
+        zigbeeModel: ['EMIZB-132'],
+        model: 'EMIZB-132',
+        vendor: 'Develco',
+        description: 'Wattle AMS HAN power-meter sensor',
+        supports: 'power measurements',
+        fromZigbee: [fz.metering_power, fz.EMIZB_132_power],
+        toZigbee: [tz.EMIZB_132_mode],
+        meta: {configureKey: 8},
+        configure: async (device, coordinatorEndpoint) => {
+            const endpoint = device.getEndpoint(2);
+            await bind(endpoint, coordinatorEndpoint, ['haElectricalMeasurement', 'seMetering']);
+
+            await readEletricalMeasurementPowerConverterAttributes(endpoint);
+            await configureReporting.rmsVoltage(endpoint);
+            await configureReporting.rmsCurrent(endpoint);
+            await configureReporting.activePower(endpoint);
+
+            await readMeteringPowerConverterAttributes(endpoint);
+            await configureReporting.instantaneousDemand(endpoint);
+            await configureReporting.currentSummDelivered(endpoint);
+            await configureReporting.currentSummReceived(endpoint);
+        },
     },
 ];
 
