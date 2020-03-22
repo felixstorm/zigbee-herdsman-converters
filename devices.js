@@ -6889,6 +6889,7 @@ const devices = [
             fz.insta_up_hold, fz.insta_stop,
         ],
         toZigbee: [],
+        ota: ota.zigbeeOTA,
     },
 
     // RGB genie
