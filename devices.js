@@ -1564,6 +1564,22 @@ const devices = [
         ota: ota.zigbeeOTA,
     },
     {
+        zigbeeModel: ['1744130P7'],
+        model: '1744130P7',
+        vendor: 'Philips',
+        description: 'Hue Econic outdoor Pedestal',
+        extend: hue.light_onoff_brightness_colortemp_colorxy,
+        ota: ota.zigbeeOTA,
+    },
+    {
+        zigbeeModel: ['1743130P7'],
+        model: '1743130P7',
+        vendor: 'Philips',
+        description: 'Hue Impress outdoor Pedestal',
+        extend: hue.light_onoff_brightness_colortemp_colorxy,
+        ota: ota.zigbeeOTA,
+    },
+    {
         zigbeeModel: ['LCC001'],
         model: '4090531P7',
         vendor: 'Philips',
@@ -2299,7 +2315,7 @@ const devices = [
         zigbeeModel: ['ZWallRemote0'],
         model: 'ZWallRemote0',
         vendor: 'Custom devices (DiY)',
-        description: 'Matts Wall Switch Remote (https://github.com/mattlokes/ZWallRemote)',
+        description: '[Matts Wall Switch Remote](https://github.com/mattlokes/ZWallRemote)',
         supports: 'on/off',
         fromZigbee: [fz.cmdToggle],
         toZigbee: [],
@@ -2308,7 +2324,7 @@ const devices = [
         zigbeeModel: ['DTB190502A1'],
         model: 'DTB190502A1',
         vendor: 'Custom devices (DiY)',
-        description: '[CC2530 based IO Board https://databyte.ch/?portfolio=zigbee-erstes-board-dtb190502a)',
+        description: '[CC2530 based IO Board](https://databyte.ch/?portfolio=zigbee-erstes-board-dtb190502a)',
         supports: 'switch, buttons',
         fromZigbee: [fz.DTB190502A1_parse],
         toZigbee: [tz.DTB190502A1_LED],
@@ -6859,6 +6875,15 @@ const devices = [
             await configureReporting.onOff(endpoint);
         },
     },
+    {
+        zigbeeModel: ['ZG2801K2-G1-RGB-CCT-LEAD'],
+        model: '511.557',
+        vendor: 'Iluminize',
+        description: 'Zigbee 3.0 wall dimmer',
+        supports: 'action',
+        fromZigbee: [fz.command_off, fz.command_on, fz.command_move_to_color_temp, fz.command_move_to_color],
+        toZigbee: [],
+    },
 
     // Anchor
     {
@@ -6877,12 +6902,16 @@ const devices = [
         },
     },
 
-    // Insta/Gira/Jung
+    // Insta
     {
         zigbeeModel: [' Remote'],
-        model: '2430-100',
-        vendor: 'Insta/Gira/Jung',
+        model: 'InstaRemote',
+        vendor: 'Insta',
         description: 'ZigBee Light Link wall transmitter',
+        whiteLabel: [
+            {vendor: 'Gira', model: '2430-100'},
+            {vendor: 'Jung', model: 'ZLLxx5004M'},
+        ],
         supports: 'action',
         fromZigbee: [
             fz.insta_scene_click, fz.command_on, fz.command_off_with_effect, fz.insta_down_hold,
@@ -7933,6 +7962,13 @@ const devices = [
         supports: 'contact',
         fromZigbee: [fz.ias_contact_alarm_1, fz.battery],
         toZigbee: [],
+    },
+    {
+        zigbeeModel: ['8643db61de35494d93e72c1289b526a3'],
+        model: 'RL804CZB',
+        vendor: 'Orvibo',
+        description: 'Zigbee LED controller RGB + CCT or RGBW',
+        extend: generic.light_onoff_brightness_colortemp_colorxy,
     },
 
     // SONOFF
